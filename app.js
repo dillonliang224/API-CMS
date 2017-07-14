@@ -35,9 +35,7 @@ const favicon = require('serve-favicon');
 
 server.middleware(function(app){
     app.use(compression());
-    console.log(20);
     app.use(timeout('20s'));
-    console.log(21);
     app.use(cookie());
     app.use(body.json());
     app.use(body.urlencoded({
