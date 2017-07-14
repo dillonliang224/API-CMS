@@ -50,6 +50,43 @@ exports.getArticleList = function (req, res, next) {
 };
 
 /**
+ * @desc 获取简书文章列表
+ * */
+exports.getArticles = function (req, res, next) {
+    console.log('hello');
+
+    articleModel.getArticles(function (err, results) {
+        if (err) {
+            return next(err);
+        }
+
+        let count = results.count;
+        let articles = [];
+
+        results.articles.forEach(function (article) {
+            if (article.id) {
+                articles.push({
+                    article_id: article._id,
+                    article_title: article.title,
+                    article_content: article.content,
+                    create_time: article.create_time
+                });
+            }
+        });
+
+        res.json({
+            flag: '0000',
+            msg: '',
+            result: {
+                ok: true,
+                count: count,
+                list: articles
+            }
+        });
+    });
+};
+
+/**
  * @desc 获取简书文章详情
  * */
 exports.getArticleDetailByID = function (req, res, next) {
