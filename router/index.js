@@ -7,7 +7,9 @@
  * */
 
 const jianshuRouter = require('./jianshu');
+const test = require('./test');
 
 module.exports = function (app) {
     jianshuRouter.map(app);
+    test.map(app);
 };
