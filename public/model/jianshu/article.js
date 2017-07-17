@@ -79,7 +79,7 @@ exports.getArticles = function (callback) {
  * */
 exports.getArticleDetailByID = function (articleID, callback) {
     let condition = {
-        _id: articleId,
+        _id: articleID,
         status: Article.STATUS.NORMAL
     };
 
