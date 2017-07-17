@@ -64,7 +64,7 @@ server.middleware(function (app) {
 const test = require('./router/test');
 
 server.route(function(app){
-    test(app);
+    test.map(app);
 });
 
 //=======================================
