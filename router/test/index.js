@@ -5,5 +5,5 @@
 const test = require('../../controller/test');
 
 exports.map = function (app) {
-    app.get('/api/test', test.test);         // test
+    app.get('/test', test.test);         // test
 };
