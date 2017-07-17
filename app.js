@@ -61,10 +61,10 @@ server.middleware(function (app) {
 
 
 //路由设置=======================================
-const router = require('./router/index');
+const test = require('./router/test');
 
 server.route(function(app){
-    router(app);
+    test(app);
 });
 
 //=======================================
