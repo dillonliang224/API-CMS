@@ -5,7 +5,7 @@
 const async = require('async');
 
 const appMongodbClient = require('../../service/cms').client;
-const AppFeedback = appMongodbClient.model('AppFeedback');
+const AppFeedback = appMongodbClient.model('Feedback');
 
 /**
  * @desc 创建反馈意见

@@ -5,7 +5,7 @@
 const async = require('async');
 
 const appMongodbClient = require('../../service/cms').client;
-const AppSplashScreen = appMongodbClient.model('AppSplashScreen');
+const AppSplashScreen = appMongodbClient.model('SplashScreen');
 
 /**
  * @desc 添加闪屏

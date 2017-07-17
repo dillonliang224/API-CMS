@@ -28,14 +28,18 @@ client.on('error', function(err){
 const administrator = require('./schema/administrator');
 const article = require('./schema/article');
 const banner = require('./schema/banner');
+const category = require('./schema/category');
 const feedback = require('./schema/feedback');
+const group = require('./schema/group');
 const splashScreen = require('./schema/splashScreen');
 
 client.model('Administrator', administrator.AdministratorSchema, 'administrator');
 client.model('Article', article.ArticleSchema, 'article');
 client.model('Banner', banner.BannerSchema, 'banner');
-client.model('AppFeedback', feedback.AppFeedbackSchema, 'app_feedback');
-client.model('AppSplashScreen', splashScreen.AppSplashScreenSchema, 'app_splash_screen');
+client.model('Category', category.CategorySchema, 'category');
+client.model('Feedback', feedback.FeedbackSchema, 'feedback');
+client.model('Group', group.GroupSchema, 'group');
+client.model('SplashScreen', splashScreen.SplashScreenSchema, 'splash_screen');
 
 exports.client = client;
 exports.mongoose = mongoose;

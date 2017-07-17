@@ -16,10 +16,8 @@ const client = mongoose.createConnection(JS_CONFIG.url, {
     user: JS_CONFIG.user,
     pass: JS_CONFIG.password
 });
-console.log(client);
 
 client.on('error', function(err){
-    console.log(222);
     console.error(err.stack);
 });
 

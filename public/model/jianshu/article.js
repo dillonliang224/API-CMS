@@ -59,8 +59,6 @@ exports.getArticles = function (callback) {
         status: Article.STATUS.NORMAL
     };
 
-    console.log(111);
-
     async.parallel({
         count: function (cb) {
             Article.count(condition, cb);
