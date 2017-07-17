@@ -53,8 +53,6 @@ exports.getArticleList = function (req, res, next) {
  * @desc 获取简书文章列表
  * */
 exports.getArticles = function (req, res, next) {
-    console.log('hello');
-
     articleModel.getArticles(function (err, results) {
         if (err) {
             return next(err);
