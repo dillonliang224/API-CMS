@@ -195,7 +195,7 @@ exports.getDraftArticleList = function (pageSkip, pageSize, callback) {
 };
 
 /**
- * @desc 获取文章详情 id
+ * @desc 获取文章详情
  * */
 exports.getArticleDetailByID = function (articleID, callback) {
     let condition = {
