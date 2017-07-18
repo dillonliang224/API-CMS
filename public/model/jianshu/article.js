@@ -14,7 +14,6 @@ const Article = jianshuMongodb.model('Article');
 exports.createNewArticle = function(article, callback) {
     let condition = {
         js_id: article.js_id,
-        status: Article.STATUS.NORMAL
     };
 
     Article.findOne(condition, function (err, result) {
@@ -25,7 +24,6 @@ exports.createNewArticle = function(article, callback) {
         if (result) {
             let condition = {
                 js_id: article.js_id,
-                status: Article.STATUS.NORMAL
             };
             
             let update = {

@@ -140,14 +140,11 @@ exports.removeArticleByID = function (req, res, next) {
             return next(err);
         }
 
-        console.log(result);
-
         res.json({
             flag: '0000',
             msg: '',
             result: {
-                ok: true,
-
+                ok: !!result,
                 success_message: '',
                 failed_message: ''
             }
@@ -207,6 +204,60 @@ exports.getArticleFromJianShu = function (req, res, next) {
                         }
                     });
                 }
+            });
+        }
+    });
+};
+
+/**
+ * @desc 从简书获取数据(指定文章链接)
+ * */
+exports.getArticleFromJianShuByUrl = function (req, res, next) {
+    let url = req.body.url;
+
+    if (!url) {
+        return next(new BadRequestError('请传入文章链接'));
+    }
+
+    request(url, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            let $ = cheerio.load(body, {decodeEntities: false}),
+                title = $('.article .title').text(),
+                avatar_info = $('.article .author .avatar'),
+                author_id = avatar_info.attr('href').replace('/u/', ''),
+                author_avatar = avatar_info.find('img').attr('src'),
+                author_name = $('.article .author .info .name a').text().trim(),
+                article_meta = $('.article .author .info .meta'),
+                publish_time = article_meta.find('.publish-time').text().trim(),
+                wordage = article_meta.find('.wordage').text().trim(),
+                content = $('.article .show-content ').html(),
+                abstract = $('.article .show-content p').first().text().slice(0, 80),
+                imageDiv = $('.article .show-content .image-package').first(),
+                image;
+
+            if (imageDiv) {
+                image = imageDiv.find('img').attr('src');
+            }
+
+            let temp = url.split('/');
+            let article_id = temp[(temp.length - 1)];
+
+            let article = {
+                js_id: article_id,
+                title: title,
+                cover: image,
+                content: content,
+                abstract: abstract,
+            };
+            articleModel.createNewArticle(article, function (err, result) {
+                res.json({
+                    flag: '0000',
+                    msg: '',
+                    result: {
+                        ok: true,
+                        article: result
+                    }
+                });
             });
         }
     });
