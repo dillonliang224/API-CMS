@@ -23,9 +23,7 @@ exports.createNewArticle = function(article, callback) {
         update_time: new Date()
     };
 
-    Article.create(articleDoc, function (err, result) {
-        callback(err, result);
-    });
+    Article.create(articleDoc, callback);
 };
 
 /**
