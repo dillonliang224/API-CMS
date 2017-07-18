@@ -8,14 +8,36 @@ const cmsMongodbClient = require('../../service/cms').client;
 const Category = cmsMongodbClient.model('Category');
 
 /**
- * @desc
+ * @desc 添加category
  * */
+exports.createNewCategory = function (category, callback) {
+    let categoryDoc = {
+        status: Category.STATUS.NORMAL,
+        title: category.title,
+        create_time: new Date,
+        update_time: new Date,
+    };
+
+    Category.create(categoryDoc, callback);
+};
 
 /**
  * @desc 更新category
  * */
 exports.updateCategory = function (category, callback) {
+    let condition = {
+        _id: category.id,
+        status: Category.STATUS.NORMAL,
+    };
 
+    let update = {
+        $set: {
+            title: category.title,
+            update_time: new Date()
+        }
+    };
+
+    Category.update(condition, update, callback);
 };
 
 /**
