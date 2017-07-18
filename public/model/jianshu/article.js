@@ -9,21 +9,51 @@ const jianshuMongodb = require('../../service/jianshu').client;
 const Article = jianshuMongodb.model('Article');
 
 /**
- * @desc 创建简书文章
+ * @desc 创建简书文章(存在更新，不存在添加)
  * */
 exports.createNewArticle = function(article, callback) {
-    let articleDoc = {
-        status: Article.STATUS.NORMAL,
-        title: article.title,
-        content: article.content,
-        abstract: article.abstract,
-        cover: article.cover,
+    let condition = {
         js_id: article.js_id,
-        create_time: new Date(),
-        update_time: new Date()
+        status: Article.STATUS.NORMAL
     };
 
-    Article.create(articleDoc, callback);
+    Article.findOne(condition, function (err, result) {
+        if (err) {
+            return callback(err);
+        }
+
+        if (result) {
+            let condition = {
+                js_id: article.js_id,
+                status: Article.STATUS.NORMAL
+            };
+            
+            let update = {
+                $set: {
+                    title: article.title,
+                    content: article.content,
+                    abstract: article.abstract,
+                    cover: article.cover,
+                    update_time: new Date()
+                }
+            };
+
+            Article.findOneAndUpdate(condition, update, {new: true}, callback);
+        } else {
+            let articleDoc = {
+                status: Article.STATUS.NORMAL,
+                title: article.title,
+                content: article.content,
+                abstract: article.abstract,
+                cover: article.cover,
+                js_id: article.js_id,
+                create_time: new Date(),
+                update_time: new Date()
+            };
+
+            Article.create(articleDoc, callback);
+        }
+    });
 };
 
 /**
