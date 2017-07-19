@@ -37,7 +37,9 @@ exports.updateCategory = function (category, callback) {
         }
     };
 
-    Category.update(condition, update, callback);
+    Category.update(condition, update, function (err, result) {
+        callback(err, result && result.nModified == 1);
+    });
 };
 
 /**
@@ -81,5 +83,7 @@ exports.removeCategory = function (categoryID, callback) {
         }
     };
 
-    Category.update(condition, update, callback);
+    Category.update(condition, update, function (err, result) {
+        callback(err, result && result.nModified == 1);
+    });
 };
