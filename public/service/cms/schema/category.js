@@ -20,8 +20,8 @@ CategorySchema.virtual('id', function () {
 
 //状态
 CategorySchema.statics.STATUS = {
-    PUBLISHED : 1,
-    REMOVED : -1,
+    REMOVED    : 0,   //删除
+    NORMAL     : 1,   //正常
 };
 
 exports.CategorySchema = CategorySchema;

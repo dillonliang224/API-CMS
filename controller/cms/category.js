@@ -26,6 +26,7 @@ exports.createNewCategory = function (req, res, next) {
             msg: '',
             result: {
                 ok: !!result,
+                category: result,
                 failed_message: !!result ? '' : '创建失败',
                 success_message: !!result ? '创建成功' : ''
             }
@@ -37,11 +38,16 @@ exports.createNewCategory = function (req, res, next) {
  * @desc 更新category
  * */
 exports.updateCategory = function (req, res, next) {
+    if (!req.body.category_id) {
+        return next(new BadRequestError('请传入category id'));
+    }
+
     if (!req.body.title) {
-        return next(new BadRequestError('请传入category'))
+        return next(new BadRequestError('请传入category title'))
     }
 
     let category = {
+        id: req.body.category_id,
         title: req.body.title
     };
 
