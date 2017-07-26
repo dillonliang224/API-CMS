@@ -49,6 +49,7 @@ exports.getArticleList = function (req, res, next) {
  * @desc 获取简书文章列表（不分页）
  * */
 exports.getArticles = function (req, res, next) {
+    console.log('获取简书文章列表');
     articleModel.getArticles(function (err, results) {
         if (err) {
             return next(err);
