@@ -51,20 +51,20 @@ server.middleware(function (app) {
 //=======================================
 const apilog = require('./middleware/log/api');
 const pagging = require('./middleware/paging/index');
-const session = require('./middleware/session/index');
+// const session = require('./middleware/session/index');
 
 server.middleware(function (app) {
     app.use(apilog());
-    app.use(session());
+    // app.use(session());
     app.use(pagging());
 });
 
 
 //路由设置=======================================
-const test = require('./router/test');
+const router = require('./router');
 
 server.route(function(app){
-    test.map(app);
+    router(app);
 });
 
 //=======================================
