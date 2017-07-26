@@ -51,11 +51,12 @@ server.middleware(function (app) {
 //=======================================
 const apilog = require('./middleware/log/api');
 const pagging = require('./middleware/paging/index');
-// const session = require('./middleware/session/index');
+// todo 处理session
+const session = require('./middleware/session/index');
 
 server.middleware(function (app) {
     app.use(apilog());
-    // app.use(session());
+    app.use(session());
     app.use(pagging());
 });
 

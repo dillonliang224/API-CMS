@@ -5,12 +5,10 @@
  */
 
 
-// const userModel = require('../../../../public/model/admin');
-
 const NODE_ENV = process.env.NODE_ENV;
 
 /**
- * 对分页参数进行修正, 防止被攻击
+ * session处理
  * */
 module.exports = function () {
     return function (req, res, next) {
@@ -55,19 +53,8 @@ module.exports = function () {
                 username: 'synder',
                 expire: Date.now() + 100000000
             };
-            return next();
         }
 
-
-        // userModel.getUserLoginToken(token,function (err, session) {
-        //     if(err){
-        //         return next();
-        //     }
-        //
-        //     req.session = session;
-        //     next();
-        // });
-
-
+        return next();
     }
 };
