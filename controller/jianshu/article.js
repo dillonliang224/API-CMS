@@ -28,6 +28,7 @@ exports.getArticleList = function (req, res, next) {
                     article_id: article._id,
                     article_title: article.title,
                     article_content: article.content,
+                    article_cover: article.cover,
                     create_time: article.create_time
                 });
             }
