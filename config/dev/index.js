@@ -18,7 +18,7 @@ module.exports =  {
      * */
     server: {
         port: {
-            http: 9990,
+            http: 9000,
             https: null
         },
         host: null,
