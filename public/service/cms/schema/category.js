@@ -10,6 +10,7 @@ const Schema = mongoose.Schema;
 const CategorySchema = new Schema({
     status          : {type: Number, required: true},   //状态
     title           : {type: String, required: true},   //标题
+    article_count   : {type: Number, required: true},   //文章数
     create_time     : {type: Date,   required: true},   //创建时间
     update_time     : {type: Date,   required: true},   //更新时间
 });

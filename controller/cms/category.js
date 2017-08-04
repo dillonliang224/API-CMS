@@ -84,6 +84,7 @@ exports.getCategoryList = function (req, res, next) {
                 categoryArr.push({
                     id: category._id,
                     title: category.title,
+                    article_count: category.article_count || 0,
                     update_time: category.update_time
                 });
             }
@@ -137,6 +138,7 @@ exports.getCategoryDetail = function (req, res, next) {
                 category: {
                     id: category._id,
                     title: category.title,
+                    article_count: category.article_count,
                     update_time: category.update_time
                 },
                 failed_message: '',

@@ -9,7 +9,10 @@ const cmsMongodb = require('../../service/cms');
 const cmsMongodbClient = cmsMongodb.client;
 
 const Article = cmsMongodbClient.model('Article');
+const MarkdownArticle = cmsMongodbClient.model('MarkdownArticle');
+const Category = cmsMongodbClient.model('Category');
 
+// cms article =======================================================
 /**
  * @desc 创建文章草稿
  * */
@@ -243,4 +246,208 @@ exports.removeArticleByID = function (articleID, publishedID, callback) {
             }
         }
     }, callback);
+};
+
+// markdown article =======================================================
+/**
+ * @desc 获取markdown文章列表
+ * */
+exports.getMarkdownArticles = function (pageSkip, pageSize, callback) {
+    let condition = {
+        status: MarkdownArticle.STATUS.NORMAL
+    };
+
+    async.parallel({
+        count: function (cb) {
+            MarkdownArticle.count(condition, cb);
+        },
+        articles: function (cb) {
+            MarkdownArticle.find(condition)
+                .populate('category_id')
+                .sort('-update_time')
+                .skip(pageSkip)
+                .limit(pageSize)
+                .exec(cb);
+        }
+    }, callback);
+};
+
+ /**
+  * @desc 获取markdown文章详情
+  * */
+exports.getMarkdownArticleDetail = function (articleID, callback) {
+    let condition = {
+        status: MarkdownArticle.STATUS.NORMAL,
+        _id: articleID
+    };
+
+    MarkdownArticle.findOne(condition)
+        .populate('category_id')
+        .exec(callback);
+};
+
+/**
+ * @desc 新建markdown文章
+ * */
+exports.createNewMarkdownArticle = function (article, callback) {
+    (async function () {
+        try {
+            let markdownArticleDoc = {
+                status: MarkdownArticle.STATUS.NORMAL,
+                title: article.title,
+                content: article.content,
+                category_id: article.category_id,
+                create_time: new Date(),
+                update_time: new Date()
+            };
+
+            let result = await Promise.resolve(MarkdownArticle.create(markdownArticleDoc));
+
+            let categoryCondition = {
+                _id: article.category_id,
+                status: Category.STATUS.NORMAL
+            };
+
+            let categoryUpdate = {
+                $inc: {
+                    article_count: 1
+                },
+                update_time: new Date()
+            };
+
+            Category.update(categoryCondition, categoryUpdate, function (err, result) {
+                if (err) {
+                    logger.error(err);
+                }
+            });
+
+            return callback(null, result);
+        } catch (err) {
+            return callback(err);
+        }
+    })();
+};
+
+/**
+ * @desc 更新markdown文章
+ * */
+exports.updateMarkdownArticle = function (article, callback) {
+    (async function () {
+        try {
+            let condition = {
+                status: MarkdownArticle.STATUS.NORMAL,
+                _id: article.id
+            };
+
+            let update = {
+                $set: {
+                    title: article.title,
+                    content: article.content,
+                    category_id: article.category_id,
+                    update_time: new Date()
+                }
+            };
+            
+            let oldArticle = await Promise.resolve(MarkdownArticle.findOneAndUpdate(condition, update));
+            
+            if (!oldArticle) {
+                return callback(null, false);
+            }
+
+            console.log(oldArticle.category_id);
+
+            if (oldArticle.category_id != article.category_id) {
+                let categoryCondition = {
+                    _id: article.category_id,
+                    status: Category.STATUS.NORMAL
+                };
+
+                let categoryUpdate = {
+                    $inc: {
+                        article_count: 1
+                    },
+                    update_time: new Date()
+                };
+
+                Category.update(categoryCondition, categoryUpdate, function (err, result) {
+                    if (err) {
+                        logger.error(err);
+                    }
+                });
+
+                let oldCategoryCondition = {
+                    _id: oldArticle.category_id,
+                    status: Category.STATUS.NORMAL
+                };
+
+                let oldCategoryUpdate = {
+                    $inc: {
+                        article_count: -1
+                    },
+                    update_time: new Date()
+                };
+
+                Category.update(oldCategoryCondition, oldCategoryUpdate, function (err, result) {
+                    if (err) {
+                        logger.error(err);
+                    }
+                });
+            }
+
+            return callback(null, true);
+
+        } catch (err) {
+            return callback(err);
+        }
+    })();
+};
+
+/**
+ * @desc 删除markdown文章
+ * */
+exports.removeMarkdownArticle = function (articleID, callback) {
+    (async function () {
+        try {
+            let condition = {
+                status: MarkdownArticle.STATUS.NORMAL,
+                _id: articleID
+            };
+
+            let update = {
+                $set: {
+                    status: MarkdownArticle.STATUS.REMOVED,
+                    update_time: new Date()
+                }
+            };
+
+            let article = await Promise.resolve(MarkdownArticle.findOneAndUpdate(condition, update, { new: true }));
+
+            if (!article || article.status != MarkdownArticle.STATUS.REMOVED) {
+                return callback(null, false);
+            }
+
+            let categoryCondition = {
+                _id: article.category_id,
+                status: Category.STATUS.NORMAL
+            };
+
+            let categoryUpdate = {
+                $inc: {
+                    article_count: -1
+                },
+                update_time: new Date()
+            };
+
+            Category.update(categoryCondition, categoryUpdate, function (err, result) {
+                if (err) {
+                    logger.error(err);
+                }
+            });
+
+            return callback(null, true);
+
+        } catch (err) {
+            return callback(err);
+        }
+    })();
 };

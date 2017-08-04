@@ -39,6 +39,7 @@ client.model('Banner', banner.BannerSchema, 'banner');
 client.model('Category', category.CategorySchema, 'category');
 client.model('Feedback', feedback.FeedbackSchema, 'feedback');
 client.model('Group', group.GroupSchema, 'group');
+client.model('MarkdownArticle', article.MarkdownArticleSchema, 'markdown_article');
 client.model('SplashScreen', splashScreen.SplashScreenSchema, 'splash_screen');
 
 exports.client = client;

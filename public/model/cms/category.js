@@ -14,6 +14,7 @@ exports.createNewCategory = function (category, callback) {
     let categoryDoc = {
         status: Category.STATUS.NORMAL,
         title: category.title,
+        article_count: 0,
         create_time: new Date,
         update_time: new Date,
     };
