@@ -354,8 +354,6 @@ exports.updateMarkdownArticle = function (article, callback) {
                 return callback(null, false);
             }
 
-            console.log(oldArticle.category_id);
-
             if (oldArticle.category_id != article.category_id) {
                 let categoryCondition = {
                     _id: article.category_id,
